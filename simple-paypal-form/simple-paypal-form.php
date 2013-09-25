@@ -27,7 +27,6 @@ function spf_process_form($atts) {
 	if (!(isset($_POST['spf_submit']))) return false;
 	$atts = shortcode_atts(
       array(
-        'amount'	  => '',
         'email'	      => '',
         'currency_code' => 'AUD',
     ), $atts );
@@ -35,10 +34,8 @@ function spf_process_form($atts) {
     if (! strlen($atts['email'])) {
     	die('[simple_paypal_form email=""] email is required.');
     }
-    if (! strlen($atts['amount'])) {
-    	die('[simple_paypal_form amount=""] amount is required.');
-    }
 
+    $spf_amount = (int) $_POST['spf_amount'];
     $spf_name = htmlentities($_POST['spf_name']);
     $spf_number = htmlentities($_POST['spf_number']);
     $spf_invnumber = htmlentities($_POST['spf_invnumber']);
@@ -51,11 +48,11 @@ function spf_process_form($atts) {
 		<input type="hidden" name="business" value="<?php echo $atts['email']; ?>">
 		<input type="hidden" name="currency_code" value="<?php echo $atts['currency_code']; ?>">
 		<input type="hidden" name="item_name" value="<?php echo $spf_name; ?>">
-		<input type="hidden" name="item_number" value="<?php echo $spf_number; ?>">
-		<input type="hidden" name="amount" value="<?php echo $atts['amount']; ?>">
+		<input type="hidden" name="item_number" value="<?php echo $spf_invnumber; ?>">
+		<input type="hidden" name="amount" value="<?php echo $spf_amount; ?>">
 		<input type="hidden" name="return" value="" />
-		<input type="hidden" name="on0" value="Invoice Number" />
-		<input type="hidden" name="os0" value="<?php echo $spf_invnumber; ?>" />
+		<input type="hidden" name="on0" value="Contact Number" />
+		<input type="hidden" name="os0" value="<?php echo $spf_number; ?>" />
 	</form>
 	<script>document.paypal.submit();</script>
 <?php
@@ -79,7 +76,11 @@ function spf_display_form() {
 </div>
 <div class='row field_text alignleft'>
     <label class='label_title' for='spf_invnumber'><strong>Invoice Number: </strong></label><br />
-    <input type='text' style='width:443px;' class='inputtext input_middle' name='spf_invnumber'/>
+    <input type='text' style='width:443px;' class='inputtext input_middle' name='spf_invnumber' />
+</div>
+<div class='row field_text alignleft'>
+    <label class='label_title' for='spf_amount'><strong>Amount: </strong></label><br />
+    <input type='text' style='width:443px;' class='inputtext input_middle' name='spf_amount' placeholder="Number only." />
 </div>
 <div class="row rowSubmit alignleft">
 	<input type="submit" class="btn-submit" name="spf_submit" title="Pay by PayPal" value="Pay by PayPal" /><br />
